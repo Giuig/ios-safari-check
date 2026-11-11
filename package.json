@@ -1,0 +1,9 @@
+{
+  "name": "ios-safari-check",
+  "private": true,
+  "type": "module",
+  "description": "Runs a scripted flow in mobile Safari on the iOS Simulator (GitHub Actions, macOS runner).",
+  "dependencies": {
+    "webdriverio": "9.33.1"
+  }
+}
