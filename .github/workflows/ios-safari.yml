@@ -1,0 +1,64 @@
+name: iOS Safari check
+
+# Opens a web page in mobile Safari on the iOS Simulator (Appium + XCUITest) and runs a scripted flow.
+# Screenshots and Safari's console go to the run's artifacts. Manual runs only.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Page to open
+        required: true
+      flow:
+        description: Flow script in flows/ (without .mjs)
+        required: true
+        default: anygacha
+
+permissions:
+  contents: read
+
+jobs:
+  safari:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Pick an iPhone simulator and boot it
+        id: sim
+        run: node scripts/boot-sim.mjs
+
+      - name: Install Appium and the XCUITest driver
+        run: |
+          npm i -g appium@2.19.0
+          appium driver install xcuitest@9.10.5
+          npm i
+
+      - name: Start Appium
+        run: |
+          appium --log-level warn --log appium.log &
+          for i in $(seq 1 30); do curl -s http://127.0.0.1:4723/status && break; sleep 2; done
+
+      - name: Run the flow
+        env:
+          URL: ${{ inputs.url }}
+          UDID: ${{ steps.sim.outputs.udid }}
+          DEVICE: ${{ steps.sim.outputs.name }}
+          IOS: ${{ steps.sim.outputs.version }}
+        run: node flows/${{ inputs.flow }}.mjs
+
+      - name: Plain simulator screenshot (fallback, always)
+        if: always()
+        run: |
+          mkdir -p out
+          xcrun simctl io "${{ steps.sim.outputs.udid }}" screenshot out/zz-simulator.png || true
+          cp appium.log out/ || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-safari
+          path: out/
