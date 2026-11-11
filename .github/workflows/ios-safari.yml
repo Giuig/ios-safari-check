@@ -37,6 +37,11 @@ jobs:
           appium driver install xcuitest@9.10.5
           npm i
 
+      - name: Build WebDriverAgent ahead of the session
+        continue-on-error: true
+        timeout-minutes: 20
+        run: appium driver run xcuitest build-wda
+
       - name: Start Appium
         run: |
           appium --log-level warn --log appium.log &

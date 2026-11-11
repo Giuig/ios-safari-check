@@ -10,6 +10,7 @@ const say = (s) => { console.log(s); report.push(s); };
 
 const b = await remote({
   hostname: '127.0.0.1', port: 4723, logLevel: 'warn',
+  connectionRetryTimeout: 900000, connectionRetryCount: 0, // the first session builds WebDriverAgent: one long wait, no restarts
   capabilities: {
     platformName: 'iOS', browserName: 'Safari',
     'appium:automationName': 'XCUITest', 'appium:udid': UDID, 'appium:deviceName': DEVICE, 'appium:platformVersion': IOS,
