@@ -16,6 +16,7 @@ const b = await remote({
     'appium:automationName': 'XCUITest', 'appium:udid': UDID, 'appium:deviceName': DEVICE, 'appium:platformVersion': IOS,
     'appium:showSafariConsoleLog': true, 'appium:safariInitialUrl': 'about:blank',
     'appium:newCommandTimeout': 300, 'appium:wdaLaunchTimeout': 600000, 'appium:wdaConnectionTimeout': 600000,
+    'appium:simulatorStartupTimeout': 600000, 'appium:noReset': true, // the runner's simulator is slow and already booted by the workflow
   },
 });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

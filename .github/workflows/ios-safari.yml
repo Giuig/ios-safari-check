@@ -33,8 +33,8 @@ jobs:
 
       - name: Install Appium and the XCUITest driver
         run: |
-          npm i -g appium@2.19.0
-          appium driver install xcuitest@9.10.5
+          npm i -g appium@3.8.0
+          appium driver install xcuitest@12.22.0
           npm i
 
       - name: Build WebDriverAgent ahead of the session
