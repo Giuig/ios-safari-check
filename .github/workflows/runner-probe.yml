@@ -1,0 +1,17 @@
+name: Runner probe
+
+# Starts one empty job per runner type, to see which runners this repo gets.
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo linux ok
+  mac:
+    runs-on: macos-latest
+    steps:
+      - run: sw_vers && xcrun simctl list runtimes | head -5
